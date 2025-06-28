@@ -5,9 +5,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import quebec.artm.breweryco.data.breweries.BreweriesRepository
 import quebec.artm.breweryco.data.breweries.BreweriesRepositoryImpl
 import quebec.artm.breweryco.data.breweries.datasources.RemoteBreweriesDataSource
-import quebec.artm.breweryco.domain.breweries.BreweriesRepository
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
