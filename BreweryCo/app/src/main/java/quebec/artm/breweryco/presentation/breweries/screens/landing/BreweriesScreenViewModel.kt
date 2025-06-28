@@ -17,9 +17,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import quebec.artm.breweryco.domain.breweries.model.Brewery
+import quebec.artm.breweryco.domain.breweries.model.BreweryType
 import quebec.artm.breweryco.domain.breweries.networking.ApiResult
 import quebec.artm.breweryco.domain.breweries.usescases.GetAllBreweriesUseCase
 import quebec.artm.breweryco.presentation.breweries.screens.landing.models.BreweriesScreenViewModelState
+import quebec.artm.breweryco.presentation.breweries.screens.landing.models.BreweryDetailsUiData
 import quebec.artm.breweryco.presentation.breweries.screens.landing.models.BreweryUiData
 import javax.inject.Inject
 
@@ -36,6 +38,11 @@ class BreweriesScreenViewModel @Inject constructor(
 
     private val _errorStateFlow = MutableStateFlow<String?>(null)
     val errorStateFlow = _errorStateFlow.asStateFlow()
+
+    private val _selectedBreweryStateFlow = MutableStateFlow<BreweryDetailsUiData?>(null)
+    val selectedBreweryStateFlow = _selectedBreweryStateFlow.asStateFlow()
+
+    private val tempList = mutableListOf<Brewery>()
 
     private var currentPage = 1
     private val pageSize = 100
@@ -85,6 +92,7 @@ class BreweriesScreenViewModel @Inject constructor(
     }
 
     private fun onBreweriesFetched(breweries: List<Brewery>) {
+        tempList += breweries
         _state.update { brewState ->
             brewState.copy(
                 breweries = _state.value.breweries.filter { b -> b.name.isNotBlank() } + breweries.map { brew -> brew.toUiModel() },
@@ -128,6 +136,21 @@ class BreweriesScreenViewModel @Inject constructor(
     fun clearError() {
         _errorStateFlow.value = null
     }
+
+    fun onBreweryClicked(brewery: BreweryUiData) {
+        val selectedBrewery = tempList.distinctBy { it.id }.find { it.id == brewery.key }
+        Log.d("onBreweryClicked", "onBreweryClicked: $selectedBrewery")
+        selectedBrewery?.let {
+            _selectedBreweryStateFlow.value =  BreweryDetailsUiData(selectedBrewery)
+        } ?: run {
+            _errorStateFlow.value = "Invalid Brewery"
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        tempList.clear()
+    }
 }
 
 
@@ -136,3 +159,4 @@ private fun Brewery.toUiModel(): BreweryUiData = BreweryUiData(
     key = id,
     name = name,
 )
+

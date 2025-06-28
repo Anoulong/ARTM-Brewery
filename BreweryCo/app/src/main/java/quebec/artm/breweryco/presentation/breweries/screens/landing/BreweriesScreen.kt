@@ -33,7 +33,7 @@ import quebec.artm.breweryco.presentation.breweries.screens.landing.models.Brewe
 import quebec.artm.breweryco.presentation.common.dialog.ErrorDialog
 
 @Composable
-fun BreweriesScreen(vm: BreweriesScreenViewModel) {
+fun BreweriesScreen(vm: BreweriesScreenViewModel, onBrewerySelected: (brewery: BreweryUiData) -> Unit,) {
     val state by vm.state.collectAsStateWithLifecycle()
     val infiniteScrollInProgressState =
         vm.infiniteScrollInProgressStateFlow.collectAsStateWithLifecycle(initialValue = false)
@@ -51,6 +51,10 @@ fun BreweriesScreen(vm: BreweriesScreenViewModel) {
         infiniteScrollInProgress = infiniteScrollInProgressState.value,
         onLoadMoreTriggered = {
             vm.onLoadMoreTriggered()
+        },
+        onBrewerySelected = { selectedBrewery ->
+            onBrewerySelected(selectedBrewery)
+            vm.onBreweryClicked(selectedBrewery)
         }
     )
 
@@ -69,6 +73,7 @@ private fun BreweriesRender(
     isLoading: Boolean = false,
     infiniteScrollInProgress: Boolean = false,
     onLoadMoreTriggered: () -> Unit,
+    onBrewerySelected: (brewery: BreweryUiData) -> Unit,
 ) {
 
     LazyColumn(modifier) {
@@ -77,11 +82,10 @@ private fun BreweriesRender(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .combinedClickable(onLongClick = {
-                        Log.d("BreweriesScreen", "onLongClick BREWERY[$index]: $brewery")
-                    }, onClick = {
-                        Log.d("BreweriesScreen", "onClick BREWERY[$index]: $brewery")
-                    })
+                    .clickable {
+                        onBrewerySelected(brewery)
+                        Log.d("BreweriesScreen", "onClick BREWERY[$index]: $onBrewerySelected")
+                    }
 
             ) {
                 Text(

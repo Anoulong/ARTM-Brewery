@@ -41,11 +41,12 @@ class BreweriesRepositoryImpl @Inject constructor(
         return Brewery(
             id = this.id.orEmpty(),
             name = this.name.orEmpty(),
-            address1 = this.address1,
+            address = this.address1,
             type = this.breweryType?.let { BreweryType.fromId(it) },
             latitude = this.latitude,
             longitude = this.longitude,
             phone = this.phone,
+            websiteUrl = this.websiteUrl,
         )
     }
 }
