@@ -34,6 +34,9 @@ class BreweriesScreenViewModel @Inject constructor(
     private val _infiniteScrollInProgressStateFlow = MutableStateFlow<Boolean>(false)
     val infiniteScrollInProgressStateFlow = _infiniteScrollInProgressStateFlow.asStateFlow()
 
+    private val _errorStateFlow = MutableStateFlow<String?>(null)
+    val errorStateFlow = _errorStateFlow.asStateFlow()
+
     private var currentPage = 1
     private val pageSize = 100
 
@@ -66,6 +69,7 @@ class BreweriesScreenViewModel @Inject constructor(
 
                     is ApiResult.Error -> {
                         _loadingStateFlow.value = false
+                        _errorStateFlow.value = result.error.message
                     }
 
                     ApiResult.Loading -> {
@@ -109,6 +113,7 @@ class BreweriesScreenViewModel @Inject constructor(
 
                     is ApiResult.Error -> {
                         _infiniteScrollInProgressStateFlow.value = false
+                        _errorStateFlow.value = result.error.message
                     }
 
                     ApiResult.Loading -> {
@@ -120,8 +125,12 @@ class BreweriesScreenViewModel @Inject constructor(
         }
     }
 
-
+    fun clearError() {
+        _errorStateFlow.value = null
+    }
 }
+
+
 
 private fun Brewery.toUiModel(): BreweryUiData = BreweryUiData(
     key = id,

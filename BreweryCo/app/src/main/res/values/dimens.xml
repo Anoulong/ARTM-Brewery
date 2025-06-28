@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="size_x_small">4dp</dimen>
+    <dimen name="size_small">8dp</dimen>
+    <dimen name="size_medium">16dp</dimen>
+    <dimen name="size_regular">24dp</dimen>
+    <dimen name="size_large">32dp</dimen>
+    <dimen name="size_x_large">48dp</dimen>
+    <dimen name="size_xx_large">56dp</dimen>
+    <dimen name="size_xxx_large">64dp</dimen>
+
+    <dimen name="card_radius">8dp</dimen>
+</resources>
