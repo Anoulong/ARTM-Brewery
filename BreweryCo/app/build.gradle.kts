@@ -40,6 +40,14 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 hilt{
@@ -71,6 +79,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     testImplementation(libs.junit.jupiter)
+    testImplementation("org.junit.platform:junit-platform-launcher")
     testImplementation(libs.assertj.core)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
